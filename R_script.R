@@ -25,28 +25,27 @@ for (col in categorical_col_names) {
 }
 
 --- 1.2
-
 # Function to calculate mode value
 Mode <- function(x) {
   ux <- unique(x)
   ux[which.max(tabulate(match(x, ux)))]
 }
-
+# Mean value for numeric columns
 for (col in numeric_col_names) {
+  print(col)
+  print(mean(data[[col]], na.rm = TRUE))
+  
   data[[col]][is.na(data[[col]])] <- mean(data[[col]], na.rm = TRUE)
 }
+# Mode value for categorical columns
 for (col in categorical_col_names) {
   mode_value <- Mode(data[[col]][!is.na(data[[col]])])
+  print(col)
+  print(mode_value)
+  
   data[[col]][is.na(data[[col]])] <- mode_value
 }
-
-
-
-
-
-
-
-
+# NA count check - There are no NA values in the data.
 sapply(data, function(x) sum(is.na(x)))
 
 
