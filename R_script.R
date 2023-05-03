@@ -15,9 +15,10 @@ sapply(data, function(x) sum(nchar(as.character(data$x))))
 
 # Update categorical values as factors with them unique values:
 categorical_col_names <- c("Gender", "Married", "Dependents", "Education", "Self_Employed", 
-               "Credit_History", "Property_Area", "Loan_Status")
+               "Credit_History", "Property_Area")
 numeric_col_names <- c("ApplicantIncome", "CoapplicantIncome", 
                        "LoanAmount", "Loan_Amount_Term")
+data$Loan_Status <- factor(data$Loan_Status, levels = unique(data$Loan_Status))
 
 for (col in categorical_col_names) {
   col_levels <- unique(data[[col]])
