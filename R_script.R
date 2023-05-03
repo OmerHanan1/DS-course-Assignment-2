@@ -65,17 +65,14 @@ labels <- c("L", "LM", "M", "MH", "H")
 labels_three <- c("L", "M", "H")
 
 data[, "ApplicantIncome"] <- bin_data(data$ApplicantIncome, bins=5, binType = "quantile")
-summary(data$ApplicantIncome)
 data$ApplicantIncome <- factor(data$ApplicantIncome, labels = labels)
 summary(data$ApplicantIncome)
 
 data[, "CoapplicantIncome"] <- bin_data(data$LoanAmount, bins=5, binType = "quantile")
-summary(data$CoapplicantIncome)
 data$CoapplicantIncome <- factor(data$CoapplicantIncome, labels = labels)
 summary(data$CoapplicantIncome)
 
 data[, "LoanAmount"] <- bin_data(data$LoanAmount, bins=3, binType = "quantile")
-summary(data$LoanAmount)
 data$LoanAmount <- factor(data$LoanAmount, labels = labels_three)
 summary(data$LoanAmount)
 
@@ -99,20 +96,39 @@ tree_infogain <- rpart(Loan_Status ~ Gender + Married + Dependents + Education +
                          Self_Employed + ApplicantIncome + CoapplicantIncome + 
                          LoanAmount + Loan_Amount_Term + Credit_History +
                          Property_Area , data = data, parms 
-                       = list(split = "information"))
+                       = list(split = "information"), cp = 0.01)
 print(tree_infogain)
 predictions <- predict(tree_infogain, test_data, type = "class")
-accuracy <- confusionMatrix(predictions, test_data$Loan_Status)$overall["Accuracy"]
-cat("Accuracy:", accuracy, "\n")
+info_accuracy <- confusionMatrix(predictions, test_data$Loan_Status)$overall["Accuracy"]
+cat("Accuracy:", info_accuracy, "\n")
 
 tree_gini <- rpart(Loan_Status ~ Gender + Married + Dependents + Education +
                          Self_Employed + ApplicantIncome + CoapplicantIncome +
                          LoanAmount + Loan_Amount_Term + Credit_History +
                          Property_Area , data = data, parms 
-                       = list(split = "gini"))
+                       = list(split = "gini"), cp = 0.01)
 print(tree_gini)
 predictions <- predict(tree_gini, test_data, type = "class")
-accuracy <- confusionMatrix(predictions, test_data$Loan_Status)$overall["Accuracy"]
-cat("Accuracy:", accuracy, "\n")
+gini_accuracy <- confusionMatrix(predictions, test_data$Loan_Status)$overall["Accuracy"]
+cat("Accuracy:", gini_accuracy, "\n")
 
+minsplit_2 <- rpart(Loan_Status ~ Gender + Married + Dependents + Education +
+                         Self_Employed + ApplicantIncome + CoapplicantIncome + 
+                         LoanAmount + Loan_Amount_Term + Credit_History +
+                         Property_Area , data = data, parms 
+                       = list(split = "information"), minsplit = 2, cp=0.01)
+print(minsplit_2)
+predictions <- predict(minsplit_2, test_data, type = "class")
+minsplit_2_accuracy <- confusionMatrix(predictions, test_data$Loan_Status)$overall["Accuracy"]
+cat("Accuracy:", minsplit_2_accuracy, "\n")
+
+minsplit_5 <- rpart(Loan_Status ~ Gender + Married + Dependents + Education +
+                      Self_Employed + ApplicantIncome + CoapplicantIncome + 
+                      LoanAmount + Loan_Amount_Term + Credit_History +
+                      Property_Area , data = data, parms 
+                    = list(split = "information"), minsplit = 5, cp=0.01)
+print(minsplit_5)
+predictions <- predict(minsplit_5, test_data, type = "class")
+minsplit_5_accuracy <- confusionMatrix(predictions, test_data$Loan_Status)$overall["Accuracy"]
+cat("Accuracy:", minsplit_5_accuracy, "\n")
 
