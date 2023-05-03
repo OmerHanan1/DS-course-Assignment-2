@@ -60,30 +60,23 @@ for (col in categorical_col_names) {
 sapply(data, function(x) sum(is.na(x)))
 
 --- 1.3
+labels <- c("L", "LM", "M", "MH", "H")
+labels_three <- c("L", "M", "H")
 
-data[, "ApplicantIncome"] <- bin_data(data$LoanAmount, bins=5, binType = "quantile")
-labels <- c("Low", "Low-Mid", "Mid", "Mid-High", "High")
-data[, "ApplicantIncome"] <- cut(data$ApplicantIncome, 
-                                 breaks = c(-Inf, quantile(data$ApplicantIncome, probs = seq(0, 1, 0.2)), Inf), 
-                                 labels = labels, include.lowest = TRUE)
-
-# Print the summary of the binned data with labels
+data[, "ApplicantIncome"] <- bin_data(data$ApplicantIncome, bins=5, binType = "quantile")
+summary(data$ApplicantIncome)
+data$ApplicantIncome <- factor(data$ApplicantIncome, labels = labels)
 summary(data$ApplicantIncome)
 
-
-
-
-
-
-
-data[, "ApplicantIncome"] <- bin_data(data$LoanAmount, bins=5, binType = "quantile")
 data[, "CoapplicantIncome"] <- bin_data(data$LoanAmount, bins=5, binType = "quantile")
-data[, "LoanAmount"] <- bin_data(data$LoanAmount, bins=3, binType = "quantile")
-
-summary(data$ApplicantIncome)
 summary(data$CoapplicantIncome)
+data$CoapplicantIncome <- factor(data$CoapplicantIncome, labels = labels)
+summary(data$CoapplicantIncome)
+
+data[, "LoanAmount"] <- bin_data(data$LoanAmount, bins=3, binType = "quantile")
 summary(data$LoanAmount)
-str(data)
+data$LoanAmount <- factor(data$LoanAmount, labels = labels_three)
+summary(data$LoanAmount)
 
 --- 1.4
 # Attached to report
