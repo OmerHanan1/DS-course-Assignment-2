@@ -6,6 +6,7 @@
 
 --- 1.1 
 data <- data.frame(train_Loan)
+data[data == ""] <- NA
 
 #Structure the data in order to find columns data types:
 str(data)
@@ -14,14 +15,11 @@ str(data)
 na_values <- sapply(data, function(x) sum(is.na(x)))
 na_values
 
-# Count empty strings values:
-empty_strings <- sapply(data, function(x) sum(nchar(x) == 0)) 
-empty_strings
 # Update categorical values as factors with them unique values:
 categorical_col_names <- c("Gender", "Married", "Dependents", "Education", "Self_Employed", 
-               "Credit_History", "Property_Area")
+               "Credit_History", "Property_Area", "Loan_Amount_Term")
 numeric_col_names <- c("ApplicantIncome", "CoapplicantIncome", 
-                       "LoanAmount", "Loan_Amount_Term")
+                       "LoanAmount")
 
 data$Loan_Status <- factor(data$Loan_Status, levels = unique(data$Loan_Status))
 
@@ -57,8 +55,8 @@ for (col in categorical_col_names) {
 # NA count check - There are no NA values in the data.
 sapply(data, function(x) sum(is.na(x)))
 
-
 --- 1.3
+
 
 
 
