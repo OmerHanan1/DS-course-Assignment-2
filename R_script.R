@@ -5,6 +5,7 @@ install.packages(caret)
 install.packages("mltools")
 library(mltools)
 library(caret)
+library(rpart)
   
 # Question 1
 
@@ -89,5 +90,29 @@ test_data <- data[-inTrain, ]
 nrow(data)
 nrow(train_data)
 nrow(test_data)
+
+# Question 2
+
+--- 2.1
+
+tree_infogain <- rpart(Loan_Status ~ Gender + Married + Dependents + Education +
+                         Self_Employed + ApplicantIncome + CoapplicantIncome + 
+                         LoanAmount + Loan_Amount_Term + Credit_History +
+                         Property_Area , data = data, parms 
+                       = list(split = "information"))
+print(tree_infogain)
+predictions <- predict(tree_infogain, test_data, type = "class")
+accuracy <- confusionMatrix(predictions, test_data$Loan_Status)$overall["Accuracy"]
+cat("Accuracy:", accuracy, "\n")
+
+tree_gini <- rpart(Loan_Status ~ Gender + Married + Dependents + Education +
+                         Self_Employed + ApplicantIncome + CoapplicantIncome +
+                         LoanAmount + Loan_Amount_Term + Credit_History +
+                         Property_Area , data = data, parms 
+                       = list(split = "gini"))
+print(tree_gini)
+predictions <- predict(tree_gini, test_data, type = "class")
+accuracy <- confusionMatrix(predictions, test_data$Loan_Status)$overall["Accuracy"]
+cat("Accuracy:", accuracy, "\n")
 
 
