@@ -2,6 +2,8 @@
 -- #Assignment 2 --
 -------------------
 install.packages(caret)
+install.packages("mltools")
+library(mltools)
 library(caret)
   
 # Question 1
@@ -58,16 +60,30 @@ for (col in categorical_col_names) {
 sapply(data, function(x) sum(is.na(x)))
 
 --- 1.3
-# Discretize the ApplicantIncome, CoapplicantIncome, LoanAmount variables into 5 categories of equal width
-data$ApplicantIncome <- cut(data$ApplicantIncome, breaks = 5, labels = c("low", "low-med", "med", "med-high", "high"))
-data$CoapplicantIncome <- cut(data$CoapplicantIncome, breaks = 5, labels = c("low", "low-med", "med", "med-high", "high"))
-data$LoanAmount <- cut(data$LoanAmount, breaks = 5, labels = c("low", "low-med", "med", "med-high", "high"))
 
-data
+data[, "ApplicantIncome"] <- bin_data(data$LoanAmount, bins=5, binType = "quantile")
+labels <- c("Low", "Low-Mid", "Mid", "Mid-High", "High")
+data[, "ApplicantIncome"] <- cut(data$ApplicantIncome, 
+                                 breaks = c(-Inf, quantile(data$ApplicantIncome, probs = seq(0, 1, 0.2)), Inf), 
+                                 labels = labels, include.lowest = TRUE)
+
+# Print the summary of the binned data with labels
+summary(data$ApplicantIncome)
 
 
 
 
+
+
+
+data[, "ApplicantIncome"] <- bin_data(data$LoanAmount, bins=5, binType = "quantile")
+data[, "CoapplicantIncome"] <- bin_data(data$LoanAmount, bins=5, binType = "quantile")
+data[, "LoanAmount"] <- bin_data(data$LoanAmount, bins=3, binType = "quantile")
+
+summary(data$ApplicantIncome)
+summary(data$CoapplicantIncome)
+summary(data$LoanAmount)
+str(data)
 
 --- 1.4
 # Attached to report
@@ -80,3 +96,5 @@ test_data <- data[-inTrain, ]
 nrow(data)
 nrow(train_data)
 nrow(test_data)
+
+
