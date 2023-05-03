@@ -6,18 +6,23 @@
 
 --- 1.1 
 data <- data.frame(train_Loan)
+
 #Structure the data in order to find columns data types:
 str(data)
-# Count NA values:
-sapply(data, function(x) sum(is.na(x)))
-# Count empty strings values:
-sapply(data, function(x) sum(nchar(as.character(data$x))))
 
+# Count NA values:
+na_values <- sapply(data, function(x) sum(is.na(x)))
+na_values
+
+# Count empty strings values:
+empty_strings <- sapply(data, function(x) sum(nchar(x) == 0)) 
+empty_strings
 # Update categorical values as factors with them unique values:
 categorical_col_names <- c("Gender", "Married", "Dependents", "Education", "Self_Employed", 
                "Credit_History", "Property_Area")
 numeric_col_names <- c("ApplicantIncome", "CoapplicantIncome", 
                        "LoanAmount", "Loan_Amount_Term")
+
 data$Loan_Status <- factor(data$Loan_Status, levels = unique(data$Loan_Status))
 
 for (col in categorical_col_names) {
@@ -31,8 +36,10 @@ Mode <- function(x) {
   ux <- unique(x)
   ux[which.max(tabulate(match(x, ux)))]
 }
+
 # Mean value for numeric columns
 for (col in numeric_col_names) {
+  # Print values for report
   print(col)
   print(mean(data[[col]], na.rm = TRUE))
   
@@ -41,6 +48,7 @@ for (col in numeric_col_names) {
 # Mode value for categorical columns
 for (col in categorical_col_names) {
   mode_value <- Mode(data[[col]][!is.na(data[[col]])])
+  # Print values for report
   print(col)
   print(mode_value)
   
@@ -50,7 +58,7 @@ for (col in categorical_col_names) {
 sapply(data, function(x) sum(is.na(x)))
 
 
-
+--- 1.3
 
 
 
