@@ -77,5 +77,6 @@ data
 inTrain <- createDataPartition(y=data$Loan_Status, p=0.8, list=FALSE)
 train_data <- data[inTrain, ]
 test_data <- data[-inTrain, ]
-
-
+nrow(data)
+nrow(train_data)
+nrow(test_data)
