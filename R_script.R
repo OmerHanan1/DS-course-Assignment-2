@@ -1,7 +1,9 @@
 -------------------
 -- #Assignment 2 --
 -------------------
-
+install.packages(caret)
+library(caret)
+  
 # Question 1
 
 --- 1.1 
@@ -56,12 +58,24 @@ for (col in categorical_col_names) {
 sapply(data, function(x) sum(is.na(x)))
 
 --- 1.3
-
 # Discretize the ApplicantIncome, CoapplicantIncome, LoanAmount variables into 5 categories of equal width
 data$ApplicantIncome <- cut(data$ApplicantIncome, breaks = 5, labels = c("low", "low-med", "med", "med-high", "high"))
 data$CoapplicantIncome <- cut(data$CoapplicantIncome, breaks = 5, labels = c("low", "low-med", "med", "med-high", "high"))
 data$LoanAmount <- cut(data$LoanAmount, breaks = 5, labels = c("low", "low-med", "med", "med-high", "high"))
 
 data
+
+
+
+
+
+--- 1.4
+# Attached to report
+
+--- 1.5
+# Split data into train and test sub-sets:
+inTrain <- createDataPartition(y=data$Loan_Status, p=0.8, list=FALSE)
+train_data <- data[inTrain, ]
+test_data <- data[-inTrain, ]
 
 
